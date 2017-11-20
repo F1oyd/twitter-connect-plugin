@@ -12,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -33,9 +36,13 @@ public class TwitterConnect extends CordovaPlugin {
 	private static final String LOG_TAG = "Twitter Connect";
 	private String action;
 
-	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-		super.initialize(cordova, webView);
-		Fabric.with(cordova.getActivity().getApplicationContext(), new Twitter(new TwitterAuthConfig(getTwitterKey(), getTwitterSecret())));
+	@Override
+	protected void pluginInitialize() {
+		Fabric.with(this.cordova.getActivity().getApplicationContext(), 
+			new Crashlytics(), 
+			new Answers(), 
+			new Twitter(new TwitterAuthConfig(getTwitterKey(), getTwitterSecret()))
+		);
 		Log.v(LOG_TAG, "Initialize TwitterConnect");
 	}
 
